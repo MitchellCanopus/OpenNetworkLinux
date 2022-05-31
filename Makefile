@@ -13,7 +13,8 @@ endif
 include $(ONL)/make/config.mk
 
 # All available architectures.
-ALL_ARCHES := amd64 powerpc armel arm64 armhf
+# ALL_ARCHES := amd64 powerpc armel arm64 armhf
+ALL_ARCHES := amd64
 
 # Build rule for each architecture.
 define build_arch_template
@@ -24,9 +25,12 @@ $(foreach a,$(ALL_ARCHES),$(eval $(call build_arch_template,$(a))))
 
 
 # Available build architectures based on the current suite
-BUILD_ARCHES_wheezy := amd64 powerpc
-BUILD_ARCHES_jessie := amd64 powerpc armel
-BUILD_ARCHES_stretch := arm64 amd64 armel armhf
+# BUILD_ARCHES_wheezy := amd64 powerpc
+# BUILD_ARCHES_jessie := amd64 powerpc armel
+# BUILD_ARCHES_stretch := arm64 amd64 armel armhf
+BUILD_ARCHES_wheezy := amd64
+BUILD_ARCHES_jessie := amd64
+BUILD_ARCHES_stretch := amd64
 
 # Build available architectures by default.
 .DEFAULT_GOAL := all
@@ -46,18 +50,18 @@ endif
 .PHONY: docker
 
 ifndef VERSION
-VERSION := 8
+VERSION := 9
 endif
 
 docker_check:
 	@which docker > /dev/null || (echo "*** Docker appears to be missing. Please install docker.io in order to build OpenNetworkLinux." && exit 1)
 
 docker: docker_check
-	@docker/tools/onlbuilder -$(VERSION) --isolate --hostname onlbuilder$(VERSION) --pull --autobuild --non-interactive
+	@docker/tools/onlbuilder -$(VERSION) --isolate --hostname onlbuilder$(VERSION) --autobuild --non-interactive
 
 # create an interative docker shell, for debugging builds
 docker-debug: docker_check
-	@docker/tools/onlbuilder -$(VERSION) --isolate --hostname onlbuilder$(VERSION) --pull
+	@docker/tools/onlbuilder -$(VERSION) --isolate --hostname onlbuilder$(VERSION)
 
 
 versions:
