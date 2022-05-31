@@ -85,3 +85,5 @@
 - htop
 - tree
 - memtester
+- dbus
+- fail2ban
