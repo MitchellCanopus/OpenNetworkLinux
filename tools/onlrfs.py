@@ -500,14 +500,18 @@ rm -f /usr/sbin/policy-rc.d
                     config = os.path.join(dir_, 'etc/ssh/sshd_config')
                     ua.chmod('a+rw', config)
                     lines = open(config).readlines()
+                    foundLine = False
                     with open(config, "w") as f:
                         for line in lines:
-                            if line.startswith('PermitRootLogin'):
+                            if line.startswith('PermitRootLogin') or line.startswith('#PermitRootLogin'):
+                                foundLine = True
                                 v = options['PermitRootLogin']
                                 logger.info("Setting PermitRootLogin to %s" % v)
                                 f.write('PermitRootLogin %s\n' % v)
                             else:
                                 f.write(line)
+                        if not foundLine:
+                            f.write('PermitRootLogin %s\n' % options['PermitRootLogin'])
                     ua.chmod('644', config)
 
                 if not options.get('securetty', True):
@@ -699,14 +703,19 @@ if __name__ == '__main__':
         config = os.path.join(ops.dir, 'etc/ssh/sshd_config')
         sa.chmod('a+rw', config)
         lines = open(config).readlines()
+        foundLine = False
         with open(config, "w") as f:
             for line in lines:
-                if line.startswith('PermitRootLogin'):
+                if line.startswith('PermitRootLogin') or line.startswith('#PermitRootLogin'):
+                    foundLine = True
                     v = "Yes"
                     logger.info("Setting PermitRootLogin to %s" % v)
                     f.write('PermitRootLogin %s\n' % v)
                 else:
                     f.write(line)
+            if not foundLine:
+                logger.info("Adding PermitRootLogin to %s" % config)
+                f.write('PermitRootLogin yes\n')    
         sa.chmod('644', config)
         sys.exit(0)
 
