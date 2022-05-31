@@ -75,7 +75,7 @@ Configure:
     - 'onlp-snmpd defaults'
     - 'ssh defaults'
     - 'openbsd-inetd remove'
-    - 'ntp remove'
+    - 'ntp defaults'
     - 'nfs-common remove'
     - 'rpcbind remove'
     - 'motd remove'
